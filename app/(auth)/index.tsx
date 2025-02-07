@@ -24,12 +24,15 @@ const Mail = require("../../assets/Icons/mail.png");
 const Lock = require("../../assets/Icons/lock.png");
 
 export default function SignIn() {
-  const decoded = useAuthToken;
-  console.log(decoded);
+  const { userId } = useAuthToken();
+  const navigation: any = useNavigation();
 
   const mutation = useMutation({
     mutationFn: (body: loginType) => {
       return LoginPostRequest(body);
+    },
+    onSuccess: () => {
+      navigation.navigate("(user)");
     },
     onError() {
       Alert.alert(
@@ -38,14 +41,13 @@ export default function SignIn() {
       );
     },
   });
-  const navigation: any = useNavigation();
 
   const { isPending, isError, isSuccess } = mutation;
 
   const [login, setlogin] = useState<loginType["login"]>("");
   const [password, setPasswored] = useState<loginType["password"]>("");
 
-  const handleSignUp = async () => {
+  const handleSignIn = async () => {
     let body = {
       login: login,
       password: password,
@@ -59,16 +61,11 @@ export default function SignIn() {
   };
 
   useEffect(() => {
-    if (!isError) {
-      if (password && login) {
-        decoded();
-        setTimeout(() => {
-          console.log("token", decoded);
-          navigation.navigate("User");
-        }, 1000);
-      }
+    console.log("+++++++++++++++++++++++++++++++++++++++");
+    if (userId) {
+      navigation.navigate("(user)");
     }
-  }, [isSuccess]);
+  }, [userId]);
 
   const [isKeyboardVisible, setKeyboardVisible] = useState(false);
   const formHeight = useRef(new Animated.Value(0.7)).current;
@@ -161,6 +158,7 @@ export default function SignIn() {
       keyboardDidShowListener.remove();
     };
   }, []);
+
   let formWrapperStyle = {
     height: formHeight.interpolate({
       inputRange: [0.7, 1],
@@ -247,21 +245,10 @@ export default function SignIn() {
                 Forgot Password?
               </Text>
             </View>
-            <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+            <TouchableOpacity style={styles.button} onPress={handleSignIn}>
               <Text style={styles.buttonText}>LOGIN</Text>
             </TouchableOpacity>
           </Animated.View>
-          {/* {!isKeyboardVisible && (
-            <View style={styles.logInTextWrapper}>
-              <Text>Don't have an account yet ? </Text>
-              <Text
-                onPress={() => navigation.navigate(`Registration`)}
-                style={styles.joinNow}
-              >
-                Join Now
-              </Text>
-            </View>
-          )} */}
         </Animated.View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>

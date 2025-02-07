@@ -16,6 +16,8 @@ export const LoginPostRequest = async (body: loginType): Promise<any> => {
       },
     });
 
+    console.log("Login response:", res);
+
     const token = res?.data?.token;
     const refreshToken = res?.data?.refreshToken;
     if (!token) throw new Error("Token is missing in response");

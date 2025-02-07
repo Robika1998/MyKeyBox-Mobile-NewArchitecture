@@ -15,7 +15,9 @@ export const useAuthToken = () => {
         if (token) {
           const decoded: decodedUserType = jwtDecode(token);
           setUserId(decoded.Id);
-          console.log("aaaaaaaaaaa", decoded);
+          console.log("Token Decoded:", decoded);
+        } else {
+          setUserId(null);
         }
       } catch (error) {
         console.error("Error decoding token:", error);
@@ -27,5 +29,26 @@ export const useAuthToken = () => {
     fetchToken();
   }, []);
 
-  return { userId, loading };
+  const saveToken = async (token: string) => {
+    try {
+      await AsyncStorage.setItem("token", token);
+      const decoded: decodedUserType = jwtDecode(token);
+      setUserId(decoded.Id);
+      console.log("Token Saved:", decoded);
+    } catch (error) {
+      console.error("Error saving token:", error);
+    }
+  };
+
+  const clearToken = async () => {
+    try {
+      await AsyncStorage.removeItem("token");
+      setUserId(null);
+      console.log("Token Cleared");
+    } catch (error) {
+      console.error("Error clearing token:", error);
+    }
+  };
+
+  return { userId, loading, saveToken, clearToken };
 };
