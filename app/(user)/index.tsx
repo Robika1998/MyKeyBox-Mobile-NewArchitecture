@@ -18,16 +18,16 @@ import { useRefreshTasks } from "@/hooks/useRefreshTasks";
 
 export default function User() {
   const { userId } = useAuthToken();
+  const { refreshing, onRefresh } = useRefreshTasks(userId as string);
 
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
   const [loadingDetails, setLoadingDetails] = useState(false);
-
-  const { refreshing, onRefresh } = useRefreshTasks(userId as string);
 
   const { data, isPending, error } = useQuery({
     queryKey: ["tasks", userId],
     queryFn: () => GetMemberTaskById(Number(userId)),
     enabled: !!userId,
+    refetchOnWindowFocus: true,
   });
 
   console.log("data", data);
@@ -91,7 +91,7 @@ export default function User() {
 
   if (isPending)
     return (
-      <ActivityIndicator style={styles.loader} size="large" color="orange" />
+      <ActivityIndicator style={styles.loader} size="large" color="black" />
     );
 
   if (error)
@@ -118,7 +118,23 @@ export default function User() {
             onRefresh={onRefresh}
           />
         ) : (
-          <Text style={styles.noTasks}>You have no orders</Text>
+          <View style={styles.noTasksContainer}>
+            <TouchableOpacity
+              onPress={onRefresh}
+              style={styles.refreshButton}
+              disabled={loadingDetails}
+            >
+              {loadingDetails ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.refreshButtonText}>Refresh</Text>
+              )}
+            </TouchableOpacity>
+            <Text style={styles.noTasks}>
+              You do not have an active order, click the button and refresh if
+              you have not received your order.
+            </Text>
+          </View>
         )}
       </View>
 
@@ -211,9 +227,50 @@ const styles = StyleSheet.create({
   orderDateText: {
     color: "#FF2D55",
   },
-  noTasks: {
+  noTasksContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+
+    borderRadius: 26,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 5,
+  },
+
+  noTasks: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "gray",
+    textAlign: "center",
+    marginTop: 60,
+  },
+
+  refreshButton: {
+    marginTop: 10,
+    width: 120,
+    height: 60,
+    backgroundColor: "#2874a6",
+    borderRadius: 15,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 8,
+    shadowColor: "#007AFF",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+    borderWidth: 2,
+    borderColor: "#fff",
+    overflow: "hidden",
+  },
+
+  refreshButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+    textTransform: "uppercase",
+    letterSpacing: 1,
   },
 });

@@ -32,7 +32,7 @@ export default function OrderDetailsModal({
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           {loading ? (
-            <ActivityIndicator size="large" color="#FF6F61" />
+            <ActivityIndicator size="large" color="black" />
           ) : (
             <ScrollView contentContainerStyle={styles.scrollContent}>
               <Text style={styles.modalHeader}>Order Details</Text>
