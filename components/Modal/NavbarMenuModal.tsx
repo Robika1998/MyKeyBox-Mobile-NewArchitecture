@@ -64,13 +64,15 @@ export default function NavbarMenuModal({
 
   return (
     <>
+      {isVisible && (
+        <TouchableOpacity onPress={onClose} style={styles.overlay} />
+      )}
       <Animated.View
         style={[
           styles.modalContainer,
           { transform: [{ translateX: slideAnim }] },
         ]}
       >
-        <TouchableOpacity onPress={onClose} style={styles.overlay} />
         <View style={styles.modalContent}>
           <TouchableOpacity
             style={styles.menuItem}
@@ -104,7 +106,7 @@ export default function NavbarMenuModal({
 const styles = StyleSheet.create({
   modalContainer: {
     position: "absolute",
-    top: 90,
+    top: 150,
     right: -18,
     width: 200,
     backgroundColor: "#3498db",

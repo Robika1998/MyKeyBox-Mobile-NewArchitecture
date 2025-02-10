@@ -9,19 +9,36 @@ import {
   Text,
 } from "react-native";
 import NavbarMenuModal from "../Modal/NavbarMenuModal";
+import { useQuery } from "@tanstack/react-query";
+import { GetMemberTaskById } from "@/Api/MemberRequest/MemberRequest";
+import { useAuthToken } from "@/hooks/useAuthToken";
 
 const Logo = require("../../assets/Icons/logo-dark.png");
 const Menu = require("../../assets/Icons/list-view.png");
 
-export default function Navbar() {
-  const [menuVisible, setMenuVisible] = useState(false);
+interface NavbarProps {
+  menuVisible: boolean;
+  setMenuVisible: (visible: boolean) => void;
+}
+
+export default function Navbar({ menuVisible, setMenuVisible }: NavbarProps) {
+  const { userId } = useAuthToken();
+
+  const { data: taskName } = useQuery({
+    queryKey: ["tasks", userId],
+    queryFn: () => GetMemberTaskById(Number(userId)),
+    enabled: !!userId,
+    select: (data) => data.name,
+  });
+
+  const displayName = taskName || "Unknown";
 
   return (
     <View style={styles.navbarContainer}>
       <StatusBar barStyle="light-content" />
       <View style={styles.innerContainer}>
         <Image source={Logo} style={styles.logo} />
-        <Text style={styles.memberText}>Member</Text>
+        <Text style={styles.memberText}>{displayName}</Text>
         <TouchableOpacity
           style={styles.menuButton}
           activeOpacity={0.7}
@@ -29,12 +46,6 @@ export default function Navbar() {
         >
           <Image source={Menu} style={styles.menuIcon} />
         </TouchableOpacity>
-        {menuVisible && (
-          <NavbarMenuModal
-            isVisible={menuVisible}
-            onClose={() => setMenuVisible(false)}
-          />
-        )}
       </View>
     </View>
   );
@@ -46,7 +57,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    paddingTop: Platform.OS === "ios" ? 70 : 40,
+    paddingTop: Platform.OS === "ios" ? 70 : 70,
     paddingHorizontal: 16,
     backgroundColor: "#2874a6",
     borderBottomLeftRadius: 10,
@@ -83,7 +94,7 @@ const styles = StyleSheet.create({
     tintColor: "#333",
   },
   memberText: {
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: "500",
     color: "#fff",
   },

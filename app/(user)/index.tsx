@@ -26,13 +26,11 @@ export default function User() {
 
   const { data, isPending, error } = useQuery({
     queryKey: ["tasks", userId],
-    // queryFn: () => GetMemberTaskById(userId),
-    queryFn: () =>
-      userId ? GetMemberTaskById(Number(userId)) : Promise.resolve(null),
+    queryFn: () => GetMemberTaskById(Number(userId)),
     enabled: !!userId,
   });
 
-  console.log("sssssssss", data);
+  console.log("data", data);
   const fetchOrderDetails = async (orderId: number) => {
     setLoadingDetails(true);
     try {
@@ -147,9 +145,9 @@ const styles = StyleSheet.create({
     paddingRight: 5,
   },
   scrollView: {
-    height: "90%",
+    height: "100%",
     width: "100%",
-    paddingBottom: 20,
+    // paddingBottom: 20,
   },
   loader: { alignSelf: "center" },
   errorContainer: {
