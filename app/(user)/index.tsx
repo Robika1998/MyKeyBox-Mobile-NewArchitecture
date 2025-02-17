@@ -119,20 +119,8 @@ export default function User() {
           />
         ) : (
           <View style={styles.noTasksContainer}>
-            <TouchableOpacity
-              onPress={onRefresh}
-              style={styles.refreshButton}
-              disabled={loadingDetails}
-            >
-              {loadingDetails ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                <Text style={styles.refreshButtonText}>Refresh</Text>
-              )}
-            </TouchableOpacity>
             <Text style={styles.noTasks}>
-              You do not have an active order, click the button and refresh if
-              you have not received your order.
+              You do not have an active order. Please wait for your order.
             </Text>
           </View>
         )}
