@@ -30,7 +30,7 @@ export default function User() {
     refetchOnWindowFocus: true,
   });
 
-  console.log("data", data);
+  // console.log("data", data);
   const fetchOrderDetails = async (orderId: number) => {
     setLoadingDetails(true);
     try {

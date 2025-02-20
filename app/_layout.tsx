@@ -31,7 +31,7 @@ export default function RootLayout() {
   useEffect(() => {
     const checkToken = async () => {
       const token = await AsyncStorage.getItem("token");
-      console.log("Stored Token:", token);
+      // console.log("Stored Token:", token);
     };
 
     checkToken();

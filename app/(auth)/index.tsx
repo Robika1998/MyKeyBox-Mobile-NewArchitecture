@@ -61,7 +61,7 @@ export default function SignIn() {
   };
 
   useEffect(() => {
-    console.log("+++++++++++++++++++++++++++++++++++++++");
+    // console.log("+++++++++++++++++++++++++++++++++++++++");
     if (userId) {
       navigation.navigate("(user)");
     }

@@ -5,7 +5,7 @@ export const GetMemberTaskById = async (memberId: number) => {
   const token = await AsyncStorage.getItem("token");
 
   try {
-    console.log("Token:", token);
+    // console.log("Token:", token);
 
     const response = await ApiManager(
       `dealership-module/Member/GetMyTask?memberId=${memberId}`,
@@ -39,7 +39,7 @@ export const GetMemberOrderInfoById = async (orderId: number) => {
   const token = await AsyncStorage.getItem("token");
 
   try {
-    console.log("Token:", token);
+    // console.log("Token:", token);
 
     const response = await ApiManager(
       `dealership-module/Member/GetOrderById/${orderId}`,
@@ -51,7 +51,7 @@ export const GetMemberOrderInfoById = async (orderId: number) => {
         },
       }
     );
-    console.log("Fetching details for Order ID:", orderId);
+    // console.log("Fetching details for Order ID:", orderId);
 
     return response.data;
   } catch (error) {
