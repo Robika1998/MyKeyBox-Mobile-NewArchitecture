@@ -13,7 +13,7 @@ import "react-native-reanimated";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAuthToken } from "@/hooks/useAuthToken";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 import { refreshToken } from "@/Api/RefreshToken/RefreshToken";
 
 const queryClient = new QueryClient();
@@ -30,7 +30,7 @@ export default function RootLayout() {
 
   useEffect(() => {
     const checkToken = async () => {
-      const token = await AsyncStorage.getItem("token");
+      const token = await SecureStore.getItemAsync("token");
       // console.log("Stored Token:", token);
     };
 

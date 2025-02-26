@@ -1,5 +1,5 @@
 import { envirement } from "@/env";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 import { ApiManager } from "../ApiManager";
 import { loginType } from "@/types/Auth-types";
 
@@ -16,14 +16,12 @@ export const LoginPostRequest = async (body: loginType): Promise<any> => {
       },
     });
 
-    // console.log("Login response:", res);
-
     const token = res?.data?.token;
     const refreshToken = res?.data?.refreshToken;
     if (!token) throw new Error("Token is missing in response");
 
-    await AsyncStorage.setItem("token", token);
-    await AsyncStorage.setItem("refreshToken", refreshToken);
+    await SecureStore.setItemAsync("token", token);
+    await SecureStore.setItemAsync("refreshToken", refreshToken);
     return res;
   } catch (error: any) {
     if (error.response) {

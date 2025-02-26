@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import AccountSettings from "./AccountSettings";
 import PrivacyPolicyModal from "./PrivacyPolicyModal";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 
 interface NavbarMenuModalProps {
   isVisible: boolean;
@@ -46,7 +46,7 @@ export default function NavbarMenuModal({
   const handleLogout = async () => {
     try {
       await clearToken();
-      const token = await AsyncStorage.getItem("token");
+      const token = await SecureStore.getItemAsync("token");
       if (!token) {
         navigation.reset({
           index: 0,

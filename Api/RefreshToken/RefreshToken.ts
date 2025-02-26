@@ -1,12 +1,12 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 import { ApiManager } from "../ApiManager";
 import { useNavigation } from "expo-router";
 
 export const refreshToken = async () => {
   const navigation: any = useNavigation();
   try {
-    const accessToken = await AsyncStorage.getItem("token");
-    const refreshToken = await AsyncStorage.getItem("refreshToken");
+    const accessToken = await SecureStore.getItemAsync("token");
+    const refreshToken = await SecureStore.getItemAsync("refreshToken");
 
     const data = await ApiManager("dealership-module/MemberAuth/Refresh", {
       method: "POST",
@@ -22,8 +22,8 @@ export const refreshToken = async () => {
     const newToken = data.data.token;
     const newRefreshToken = data.data.refreshToken;
 
-    await AsyncStorage.setItem("token", newToken);
-    await AsyncStorage.setItem("refreshToken", newRefreshToken);
+    await SecureStore.setItemAsync("token", newToken);
+    await SecureStore.setItemAsync("refreshToken", newRefreshToken);
 
     return data;
   } catch (error: any) {

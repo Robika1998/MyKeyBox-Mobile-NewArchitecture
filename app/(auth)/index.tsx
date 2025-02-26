@@ -358,7 +358,8 @@ import { useNavigation } from "expo-router";
 import { LoginPostRequest } from "@/Api/Auth/Auth";
 import { useMutation } from "@tanstack/react-query";
 import { useAuthToken } from "@/hooks/useAuthToken";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
+
 const Logo = require("../../assets/Icons/logo-dark.png");
 const Mail = require("../../assets/Icons/mail.png");
 const Lock = require("../../assets/Icons/lock.png");
@@ -391,7 +392,7 @@ export default function SignIn() {
   useEffect(() => {
     const loadCredentials = async () => {
       try {
-        const storedCredentials = await AsyncStorage.getItem("credentials");
+        const storedCredentials = await SecureStore.getItemAsync("credentials");
         if (storedCredentials !== null) {
           const { login, password } = JSON.parse(storedCredentials);
           setlogin(login);
@@ -414,7 +415,7 @@ export default function SignIn() {
     if (login && password) {
       if (rememberMe) {
         try {
-          await AsyncStorage.setItem(
+          await SecureStore.setItemAsync(
             "credentials",
             JSON.stringify({ login, password })
           );
@@ -423,7 +424,7 @@ export default function SignIn() {
         }
       } else {
         try {
-          await AsyncStorage.removeItem("credentials");
+          await SecureStore.deleteItemAsync("credentials");
         } catch (error) {
           console.log("Error removing credentials:", error);
         }

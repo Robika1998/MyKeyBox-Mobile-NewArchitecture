@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 import { jwtDecode } from "jwt-decode";
 import { useNavigation } from "expo-router";
 
@@ -13,7 +13,7 @@ export const useAuthToken = () => {
   useEffect(() => {
     const fetchToken = async () => {
       try {
-        const token = await AsyncStorage.getItem("token");
+        const token = await SecureStore.getItemAsync("token");
         if (token) {
           const decoded: decodedUserType = jwtDecode(token);
           setUserId(decoded.Id);
@@ -32,7 +32,9 @@ export const useAuthToken = () => {
 
   const saveToken = async (token: string) => {
     try {
-      await AsyncStorage.setItem("token", token);
+      await SecureStore.setItemAsync("token", token, {
+        keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+      });
       const decoded: decodedUserType = jwtDecode(token);
       setUserId(decoded.Id);
     } catch (error) {
@@ -42,10 +44,9 @@ export const useAuthToken = () => {
 
   const clearToken = async () => {
     try {
-      await AsyncStorage.removeItem("token");
-      await AsyncStorage.removeItem("refreshToken");
+      await SecureStore.deleteItemAsync("token");
+      await SecureStore.deleteItemAsync("refreshToken");
       setUserId(null);
-      // navigation.replace("(auth)");
     } catch (error) {
       console.error("Error clearing token:", error);
     }

@@ -1,8 +1,8 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 import { ApiManager } from "../ApiManager";
 
 export const GetMemberTaskById = async (memberId: number) => {
-  const token = await AsyncStorage.getItem("token");
+  const token = await SecureStore.getItemAsync("token");
 
   try {
     // console.log("Token:", token);
@@ -36,7 +36,7 @@ export const GetMemberTaskById = async (memberId: number) => {
 };
 
 export const GetMemberOrderInfoById = async (orderId: number) => {
-  const token = await AsyncStorage.getItem("token");
+  const token = await SecureStore.getItemAsync("token");
 
   try {
     // console.log("Token:", token);

@@ -1,10 +1,10 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from "expo-secure-store";
 import { ApiManager } from "../ApiManager";
 import { envirement } from "@/env";
 
 export const DeleteAccount = async (id: string) => {
   try {
-    const token = await AsyncStorage.getItem("token");
+    const token = await SecureStore.getItemAsync("token");
     if (!token) {
       throw new Error("Token not found");
     }
